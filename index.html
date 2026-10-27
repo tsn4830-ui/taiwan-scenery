@@ -97,7 +97,7 @@ footer .wrap { padding-block: 32px 40px; display: flex; flex-wrap: wrap; gap: 20
       <button class="chip" id="l-2" aria-pressed="false" data-l="中級">中級</button>
       <button class="chip" id="l-3" aria-pressed="false" data-l="進階">進階・高山</button>
     </div>
-    <div class="chips levels" id="regions" role="group" aria-label="地區" hidden>
+    <div class="chips levels" id="regions" role="group" aria-label="地區">
       <button class="chip" id="r-all" aria-pressed="true" data-r="">全部地區</button>
       <button class="chip" id="r-n" aria-pressed="false" data-r="北部">北部</button>
       <button class="chip" id="r-m" aria-pressed="false" data-r="中部">中部</button>
@@ -121,11 +121,11 @@ const EMBED = true;
 
 // Fill video and channel from the 素材清單 sheet.
 const SPOTS = [
-  { name: "太魯閣峽谷", county: "花蓮縣", cat: "自然風光", video: "https://www.youtube.com/watch?v=8eWsEqPVPHY", channel: "Music Life Channel", channelUrl: "", blurb: "立霧溪切穿大理石岩層，峭壁直落數百公尺。" },
-  { name: "阿里山日出雲海", county: "嘉義縣", cat: "自然風光", video: "https://www.youtube.com/watch?v=LrjDGN54yKg", channel: "靖天電視台 GoldenTV", channelUrl: "https://www.youtube.com/channel/UCNdrFiN0d3GSIiTxkLrgjXQ", blurb: "祝山觀日、森林小火車與千年神木。" },
-  { name: "日月潭", county: "南投縣", cat: "自然風光", video: "https://www.youtube.com/watch?v=SgeOXmTPIgU", channel: "空中嚮島 The Formosa Guide", channelUrl: "https://www.youtube.com/channel/UCpEBW-QOxIHyLVx9uftc5MA", blurb: "台灣最大的天然淡水湖，邵族的家鄉。" },
-  { name: "清境合歡山", county: "南投縣", cat: "自然風光", video: "https://www.youtube.com/watch?v=ZX8tu_Lrt0Q", channel: "Kimi0120", channelUrl: "https://www.youtube.com/channel/UC2jtyP3wnktGSxsGJjCBDlw", blurb: "武嶺海拔 3,275 公尺，公路可達的最高點。" },
-  { name: "墾丁", county: "屏東縣", cat: "自然風光", video: "https://www.youtube.com/watch?v=x6Sr3VXTO8E", channel: "空中嚮島 The Formosa Guide", channelUrl: "https://www.youtube.com/channel/UCpEBW-QOxIHyLVx9uftc5MA", blurb: "珊瑚礁海岸與熱帶海灘，台灣的最南端。" },
+  { name: "太魯閣峽谷", region: "東部", county: "花蓮縣", cat: "自然風光", video: "https://www.youtube.com/watch?v=8eWsEqPVPHY", channel: "Music Life Channel", channelUrl: "", blurb: "立霧溪切穿大理石岩層，峭壁直落數百公尺。" },
+  { name: "阿里山日出雲海", region: "南部", county: "嘉義縣", cat: "自然風光", video: "https://www.youtube.com/watch?v=LrjDGN54yKg", channel: "靖天電視台 GoldenTV", channelUrl: "https://www.youtube.com/channel/UCNdrFiN0d3GSIiTxkLrgjXQ", blurb: "祝山觀日、森林小火車與千年神木。" },
+  { name: "日月潭", region: "中部", county: "南投縣", cat: "自然風光", video: "https://www.youtube.com/watch?v=SgeOXmTPIgU", channel: "空中嚮島 The Formosa Guide", channelUrl: "https://www.youtube.com/channel/UCpEBW-QOxIHyLVx9uftc5MA", blurb: "台灣最大的天然淡水湖，邵族的家鄉。" },
+  { name: "清境合歡山", region: "中部", county: "南投縣", cat: "自然風光", video: "https://www.youtube.com/watch?v=ZX8tu_Lrt0Q", channel: "Kimi0120", channelUrl: "https://www.youtube.com/channel/UC2jtyP3wnktGSxsGJjCBDlw", blurb: "武嶺海拔 3,275 公尺，公路可達的最高點。" },
+  { name: "墾丁", region: "南部", county: "屏東縣", cat: "自然風光", video: "https://www.youtube.com/watch?v=x6Sr3VXTO8E", channel: "空中嚮島 The Formosa Guide", channelUrl: "https://www.youtube.com/channel/UCpEBW-QOxIHyLVx9uftc5MA", blurb: "珊瑚礁海岸與熱帶海灘，台灣的最南端。" },
   { name: "玉山主峰步道", region: "中部", level: "進階", county: "南投縣・嘉義縣", cat: "自然風光", trail: true, video: "https://www.youtube.com/watch?v=ysDWIoApD7s", channel: "UM94 - Xing & Irene", channelUrl: "https://www.youtube.com/channel/UCqJkE1veH7eTm2Iy9f_V3hg", blurb: "從塔塔加出發、夜宿排雲山莊，清晨登上海拔 3,952 公尺的東北亞最高峰。" },
   { name: "雪山主東峰步道", region: "中部", level: "進階", county: "台中市", cat: "自然風光", trail: true, video: "https://www.youtube.com/watch?v=IXnXfw4p1S4", channel: "ParksTaiwan", channelUrl: "https://www.youtube.com/channel/UCmHVEUvyGddIhcTHskn85AQ", blurb: "穿過黑森林、走上冰河遺跡雪山圈谷，登頂台灣第二高峰 3,886 公尺。" },
   { name: "嘉明湖步道", region: "東部", level: "進階", county: "台東縣", cat: "自然風光", trail: true, video: "https://www.youtube.com/watch?v=a_nkGxbfZc0", channel: "荒野艾客 Wild Adventurer", channelUrl: "https://www.youtube.com/channel/UC_Q-waelnYuYUbLD98s-Nmg", blurb: "三天兩夜走過向陽山、三叉山，看見被稱為「天使的眼淚」的高山湖泊。" },
@@ -139,11 +139,11 @@ const SPOTS = [
   { name: "鳶嘴山", region: "中部", level: "進階", county: "台中市", cat: "自然風光", trail: true, video: "https://www.youtube.com/watch?v=S3SoQJnykgI", channel: "逮丸女森 Michelle Chen", channelUrl: "https://www.youtube.com/channel/UCogZnszhYTs-zP5fDlsl0Sw", blurb: "大雪山林道旁的岩稜，需拉繩攀爬峭壁，景色刺激，懼高者請斟酌。" },
   { name: "柴山（壽山）步道", region: "南部", level: "入門", county: "高雄市", cat: "自然風光", trail: true, video: "https://www.youtube.com/watch?v=hBWBuT5CSpM", channel: "葉生活 X EVEN日記", channelUrl: "https://www.youtube.com/channel/UCjZUx06l9Rmym3Y3AhXoDhQ", blurb: "高雄市區旁的珊瑚礁石灰岩山，林間常見台灣獼猴，小百岳之一。" },
   { name: "北大武山", region: "南部", level: "進階", county: "屏東縣", cat: "自然風光", trail: true, video: "https://www.youtube.com/watch?v=vQzNkZgQv0s", channel: "Wake up Sonya", channelUrl: "https://www.youtube.com/channel/UCRtMuhv24eGKgDqeLxvhAjg", blurb: "排灣族與魯凱族的聖山，夜宿檜谷山莊，登頂 3,092 公尺看南台灣雲海。" },
-  { name: "九份老街", county: "新北市", cat: "人文色彩", video: "https://www.youtube.com/watch?v=iBgg8J5aDGU", channel: "Walking Expedition", channelUrl: "https://www.youtube.com/channel/UCmcOV3wooh5NfHHR5Szy0-A", blurb: "依山而建的金礦山城，夜裡亮起紅燈籠。" },
-  { name: "鹿港老街", county: "彰化縣", cat: "人文色彩", video: "https://www.youtube.com/watch?v=0ADYYdL8bTQ", channel: "Taiwan Wanderer 台灣亂流散步", channelUrl: "https://www.youtube.com/channel/UC9DjIldTTSLw_vAqG686rqQ", blurb: "「一府二鹿三艋舺」，清代繁華港口的街屋與廟宇。" },
-  { name: "台南孔廟與府城古蹟", county: "台南市", cat: "人文色彩", video: "https://www.youtube.com/watch?v=hQ4ie7yp1tY", channel: "Jasper | 漫步", channelUrl: "https://www.youtube.com/channel/UCZ3dBvGfn6BRSPAMnd9-xow", blurb: "全台首學，府城四百年的歷史起點。" },
-  { name: "大甲媽祖遶境", county: "台中市", cat: "人文色彩", video: "https://www.youtube.com/watch?v=Q4rkw2B0jeI", channel: "先楓行腳", channelUrl: "https://www.youtube.com/channel/UCuN7DbHm4f9rACBK9ze9DxQ", blurb: "九天八夜、數十萬信眾隨行的宗教盛事。" },
-  { name: "蘭嶼達悟族", county: "台東縣", cat: "人文色彩", video: "https://www.youtube.com/watch?v=a41WxnqUujo", channel: "1000步要去哪裡", channelUrl: "https://www.youtube.com/channel/UC2x5k8GlQg5DA2LsgUYylEg", blurb: "拼板舟、飛魚季與地下屋的海洋文化。" }
+  { name: "九份老街", region: "北部", county: "新北市", cat: "人文色彩", video: "https://www.youtube.com/watch?v=iBgg8J5aDGU", channel: "Walking Expedition", channelUrl: "https://www.youtube.com/channel/UCmcOV3wooh5NfHHR5Szy0-A", blurb: "依山而建的金礦山城，夜裡亮起紅燈籠。" },
+  { name: "鹿港老街", region: "中部", county: "彰化縣", cat: "人文色彩", video: "https://www.youtube.com/watch?v=0ADYYdL8bTQ", channel: "Taiwan Wanderer 台灣亂流散步", channelUrl: "https://www.youtube.com/channel/UC9DjIldTTSLw_vAqG686rqQ", blurb: "「一府二鹿三艋舺」，清代繁華港口的街屋與廟宇。" },
+  { name: "台南孔廟與府城古蹟", region: "南部", county: "台南市", cat: "人文色彩", video: "https://www.youtube.com/watch?v=hQ4ie7yp1tY", channel: "Jasper | 漫步", channelUrl: "https://www.youtube.com/channel/UCZ3dBvGfn6BRSPAMnd9-xow", blurb: "全台首學，府城四百年的歷史起點。" },
+  { name: "大甲媽祖遶境", region: "中部", county: "台中市", cat: "人文色彩", video: "https://www.youtube.com/watch?v=Q4rkw2B0jeI", channel: "先楓行腳", channelUrl: "https://www.youtube.com/channel/UCuN7DbHm4f9rACBK9ze9DxQ", blurb: "九天八夜、數十萬信眾隨行的宗教盛事。" },
+  { name: "蘭嶼達悟族", region: "東部", county: "台東縣", cat: "人文色彩", video: "https://www.youtube.com/watch?v=a41WxnqUujo", channel: "1000步要去哪裡", channelUrl: "https://www.youtube.com/channel/UC2x5k8GlQg5DA2LsgUYylEg", blurb: "拼板舟、飛魚季與地下屋的海洋文化。" }
 ];
 
 function videoId(url) {
@@ -179,12 +179,12 @@ const ORDER = { "入門": 1, "中級": 2, "進階": 3 };
 const regions = document.getElementById("regions");
 let cat = "", lvl = "", reg = "";
 function render() {
-  let list = SPOTS.filter(s => !cat || (cat === "trail" ? s.trail : s.cat === cat));
+  let list = SPOTS.filter(s => (!cat || (cat === "trail" ? s.trail : s.cat === cat)) && (!reg || s.region === reg));
   if (cat === "trail") {
-    list = list.filter(s => (!lvl || s.level === lvl) && (!reg || s.region === reg)).sort((a, b) => ORDER[a.level] - ORDER[b.level]);
+    list = list.filter(s => !lvl || s.level === lvl).sort((a, b) => ORDER[a.level] - ORDER[b.level]);
   }
-  levels.hidden = regions.hidden = cat !== "trail";
-  grid.innerHTML = list.length ? list.map(card).join("") : `<p class="empty">這個地區目前沒有這個難度的步道。</p>`;
+  levels.hidden = cat !== "trail";
+  grid.innerHTML = list.length ? list.map(card).join("") : `<p class="empty">這個地區目前還沒有符合的景點。</p>`;
 }
 function press(group, btn) {
   group.querySelectorAll(".chip").forEach(x => x.setAttribute("aria-pressed", x === btn ? "true" : "false"));
