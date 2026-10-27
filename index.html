@@ -59,10 +59,12 @@ main .wrap { padding-block: 8px 56px; }
 .levels { margin-bottom: 12px; }
 #regions { margin-bottom: 24px; }
 .empty { color: var(--muted); }
+.livenote { margin: 0 0 20px; font-size: 13px; color: var(--muted); }
 .lv { font-size: 12px; font-weight: 700; padding: 1px 10px; border-radius: 999px; border: 1px solid currentColor; }
 .lv[data-l="入門"] { color: var(--nature); }
 .lv[data-l="中級"] { color: var(--mid); }
 .lv[data-l="進階"] { color: var(--culture); }
+.lv.live { color: #fff; background: #d23a2a; border-color: #d23a2a; }
 .credit { margin: 0; font-size: 13px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 8px; }
 .credit a { color: var(--fg); }
 .blurb { margin: 0; }
@@ -84,6 +86,7 @@ footer .wrap { padding-block: 32px 40px; display: flex; flex-wrap: wrap; gap: 20
       <button class="chip" id="f-all" aria-pressed="true" data-f="">全部</button>
       <button class="chip" id="f-n" aria-pressed="false" data-f="自然風光">自然風光</button>
       <button class="chip" id="f-t" aria-pressed="false" data-f="trail">山林步道</button>
+      <button class="chip" id="f-l" aria-pressed="false" data-f="live">即時直播</button>
       <button class="chip" id="f-c" aria-pressed="false" data-f="人文色彩">人文色彩</button>
     </div>
   </div>
@@ -104,6 +107,7 @@ footer .wrap { padding-block: 32px 40px; display: flex; flex-wrap: wrap; gap: 20
       <button class="chip" id="r-s" aria-pressed="false" data-r="南部">南部</button>
       <button class="chip" id="r-e" aria-pressed="false" data-r="東部">東部</button>
     </div>
+    <p class="livenote" id="livenote" hidden>直播由各頻道提供，鏡頭維修或夜間時畫面可能暫停，請以 YouTube 頻道為準。</p>
     <div class="grid" id="grid"></div>
   </div>
 </main>
@@ -121,6 +125,13 @@ const EMBED = true;
 
 // Fill video and channel from the 素材清單 sheet.
 const SPOTS = [
+  { name: "太魯閣國家公園", live: true, region: "東部", county: "花蓮縣", cat: "自然風光", video: "https://www.youtube.com/watch?v=y1gCwDeq2KY", channel: "太魯閣國家公園", channelUrl: "https://www.youtube.com/channel/UCkt_34Bb8mQYGUfG4b5vI2A", blurb: "國家公園官方 360 度全景即時影像，可拖曳畫面環顧峽谷。" },
+  { name: "阿里山小笠原觀日平台", live: true, region: "南部", county: "嘉義縣", cat: "自然風光", video: "https://www.youtube.com/watch?v=6Y97q9KrhwA", channel: "國家森林遊樂區即時影像", channelUrl: "https://www.youtube.com/channel/UCOvjqsgwf8RFMmyj7QIQhSg", blurb: "清晨看玉山山脈日出與雲海，白天是阿里山的即時天氣。" },
+  { name: "阿里山二延平步道", live: true, region: "南部", county: "嘉義縣", cat: "自然風光", video: "https://www.youtube.com/watch?v=j2L_559nCjc", channel: "阿里山國家風景區管理處", channelUrl: "https://www.youtube.com/channel/UCQqyZgPh9Lu0w_rmWWBvuNg", blurb: "茶園與山稜的 4K 即時畫面，傍晚常有夕陽雲海。" },
+  { name: "合歡山武嶺", live: true, region: "中部", county: "南投縣", cat: "自然風光", video: "https://www.youtube.com/watch?v=Jx01B71j0wc", channel: "TUI Hz", channelUrl: "https://www.youtube.com/channel/UCnYcHH_lKR14OV3RgzUGTtQ", blurb: "台灣公路最高點的 24 小時畫面，冬天追雪必看。" },
+  { name: "象山看台北", live: true, region: "北部", county: "台北市", cat: "自然風光", video: "https://www.youtube.com/watch?v=z_fY1pj1VBw", channel: "台北觀光即時影像", channelUrl: "https://www.youtube.com/channel/UCJLjpq7pTJRbP3vtx0LxB9Q", blurb: "台北市政府官方鏡頭，從象山俯瞰台北 101 與盆地夜景。" },
+  { name: "九份山城", live: true, region: "北部", county: "新北市", cat: "人文色彩", video: "https://www.youtube.com/watch?v=XSD5ptYisw8", channel: "新北觀光即時影像", channelUrl: "https://www.youtube.com/channel/UCm8_3Nf9LFmPwuKSvYhhwLw", blurb: "新北市官方鏡頭，看九份山城與海景的即時天色。" },
+  { name: "墾丁南灣", live: true, region: "南部", county: "屏東縣", cat: "自然風光", video: "https://www.youtube.com/watch?v=9jrXieVMVZw", channel: "我愛墾丁旅遊票券中心", channelUrl: "https://www.youtube.com/channel/UCpOav19GgbSHnP2iwOa5Y2Q", blurb: "南灣沙灘的即時海景，出發前先看浪況與天氣。" },
   { name: "太魯閣峽谷", region: "東部", county: "花蓮縣", cat: "自然風光", video: "https://www.youtube.com/watch?v=8eWsEqPVPHY", channel: "Music Life Channel", channelUrl: "", blurb: "立霧溪切穿大理石岩層，峭壁直落數百公尺。" },
   { name: "阿里山日出雲海", region: "南部", county: "嘉義縣", cat: "自然風光", video: "https://www.youtube.com/watch?v=LrjDGN54yKg", channel: "靖天電視台 GoldenTV", channelUrl: "https://www.youtube.com/channel/UCNdrFiN0d3GSIiTxkLrgjXQ", blurb: "祝山觀日、森林小火車與千年神木。" },
   { name: "日月潭", region: "中部", county: "南投縣", cat: "自然風光", video: "https://www.youtube.com/watch?v=SgeOXmTPIgU", channel: "空中嚮島 The Formosa Guide", channelUrl: "https://www.youtube.com/channel/UCpEBW-QOxIHyLVx9uftc5MA", blurb: "台灣最大的天然淡水湖，邵族的家鄉。" },
@@ -167,7 +178,7 @@ function card(s) {
     : "（頻道名稱待補）";
   return `<article class="card" data-cat="${s.cat}">
     <div class="video">${frame}</div>
-    <div class="meta"><h2>${esc(s.name)}</h2><span class="tag"><i>${s.trail ? "山林步道" : s.cat}</i>　${s.region ? s.region + "・" : ""}${esc(s.county)}</span>${s.level ? `<span class="lv" data-l="${s.level}">${s.level}</span>` : ""}</div>
+    <div class="meta"><h2>${esc(s.name)}</h2><span class="tag"><i>${s.trail ? "山林步道" : s.cat}</i>　${s.region ? s.region + "・" : ""}${esc(s.county)}</span>${s.level ? `<span class="lv" data-l="${s.level}">${s.level}</span>` : ""}${s.live ? `<span class="lv live">● LIVE</span>` : ""}</div>
     <p class="blurb">${esc(s.blurb)}</p>
     <p class="credit">影片：${ch}　著作權與收益歸原作者所有</p>
   </article>`;
@@ -179,11 +190,12 @@ const ORDER = { "入門": 1, "中級": 2, "進階": 3 };
 const regions = document.getElementById("regions");
 let cat = "", lvl = "", reg = "";
 function render() {
-  let list = SPOTS.filter(s => (!cat || (cat === "trail" ? s.trail : s.cat === cat)) && (!reg || s.region === reg));
+  let list = SPOTS.filter(s => (!cat || (cat === "trail" ? s.trail : cat === "live" ? s.live : s.cat === cat)) && (!reg || s.region === reg));
   if (cat === "trail") {
     list = list.filter(s => !lvl || s.level === lvl).sort((a, b) => ORDER[a.level] - ORDER[b.level]);
   }
   levels.hidden = cat !== "trail";
+  document.getElementById("livenote").hidden = cat !== "live";
   grid.innerHTML = list.length ? list.map(card).join("") : `<p class="empty">這個地區目前還沒有符合的景點。</p>`;
 }
 function press(group, btn) {
