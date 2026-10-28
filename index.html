@@ -59,6 +59,9 @@ main .wrap { padding-block: 8px 56px; }
 .levels { margin-bottom: 12px; }
 #regions { margin-bottom: 24px; }
 .empty { color: var(--muted); }
+.golive { align-self: flex-start; font-size: 13px; font-weight: 500; color: #d23a2a; text-decoration: none; }
+.golive:hover { text-decoration: underline; }
+.pop .golive { display: inline-block; margin-bottom: 6px; }
 .livenote { margin: 0 0 20px; font-size: 13px; color: var(--muted); }
 .lv { font-size: 12px; font-weight: 700; padding: 1px 10px; border-radius: 999px; border: 1px solid currentColor; }
 .lv[data-l="入門"] { color: var(--nature); }
@@ -189,7 +192,8 @@ function frame(s, lazy) {
   const id = videoId(s.video);
   let frame;
   if (id && EMBED) {
-    frame = `<iframe src="https://www.youtube-nocookie.com/embed/${id}" title="${esc(s.name)}" loading="lazy" allow="encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
+    const host = s.live ? "https://www.youtube.com" : "https://www.youtube-nocookie.com";
+    frame = `<iframe src="${host}/embed/${id}" title="${esc(s.name)}" loading="lazy" allow="encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
   } else if (id) {
     frame = `<div class="ph"><strong>${esc(s.name)}</strong><a href="https://www.youtube.com/watch?v=${id}" target="_blank" rel="noopener">在 YouTube 觀看</a></div>`;
   } else {
@@ -203,12 +207,16 @@ function credit(s) {
     : "（頻道名稱待補）";
   return ch;
 }
+function liveLink(s) {
+  const id = videoId(s.video);
+  return s.live && id ? `<a class="golive" href="https://www.youtube.com/watch?v=${id}" target="_blank" rel="noopener">▶ 畫面沒出來？到 YouTube 看直播</a>` : "";
+}
 function card(s) {
   const ch = credit(s);
   return `<article class="card" data-cat="${s.cat}">
     <div class="video">${frame(s)}</div>
     <div class="meta"><h2>${esc(s.name)}</h2><span class="tag"><i>${s.trail ? "山林步道" : s.cat}</i>　${s.region ? s.region + "・" : ""}${esc(s.county)}</span>${s.level ? `<span class="lv" data-l="${s.level}">${s.level}</span>` : ""}${s.live ? `<span class="lv live">● LIVE</span>` : ""}</div>
-    <p class="blurb">${esc(s.blurb)}</p>
+    <p class="blurb">${esc(s.blurb)}</p>${liveLink(s)}
     <p class="credit">影片：${ch}　著作權與收益歸原作者所有</p>
   </article>`;
 }
@@ -253,7 +261,7 @@ function drawPins(list) {
     el.title = s.name;
     el.setAttribute("aria-label", s.name);
     const popup = new maplibregl.Popup({ offset: 12, maxWidth: "none" }).setHTML(
-      `<div class="pop"><h3>${esc(s.name)}</h3><div class="video">${frame(s)}</div><p>影片：${credit(s)}・著作權與收益歸原作者所有</p></div>`);
+      `<div class="pop"><h3>${esc(s.name)}</h3><div class="video">${frame(s)}</div>${liveLink(s)}<p>影片：${credit(s)}・著作權與收益歸原作者所有</p></div>`);
     popup.on("open", () => map.easeTo({ center: [s.lng, s.lat], zoom: Math.max(map.getZoom(), 10.5), pitch: 60, duration: 1400 }));
     return new maplibregl.Marker({ element: el }).setLngLat([s.lng, s.lat]).setPopup(popup).addTo(map);
   });
