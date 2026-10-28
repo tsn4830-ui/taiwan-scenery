@@ -63,6 +63,10 @@ main .wrap { padding-block: 8px 56px; }
 .lv[data-l="入門"] { color: var(--nature); }
 .lv[data-l="中級"] { color: var(--mid); }
 .lv[data-l="進階"] { color: var(--culture); }
+.earth { align-self: flex-start; display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 500; color: var(--nature); border: 1px solid var(--line); border-radius: 999px; padding: 4px 12px; text-decoration: none; }
+.earth:hover { border-color: var(--nature); }
+.earth:focus-visible { outline: 2px solid var(--nature); outline-offset: 2px; }
+.pop .earth { margin-bottom: 6px; }
 .credit { margin: 0; font-size: 13px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 8px; }
 .credit a { color: var(--fg); }
 .blurb { margin: 0; }
@@ -140,7 +144,7 @@ const EMBED = true;
 
 // Fill video and channel from the 素材清單 sheet.
 const SPOTS = [
-  { name: "太魯閣峽谷", lat: 24.173, lng: 121.57, region: "東部", county: "花蓮縣", cat: "自然風光", video: "https://www.youtube.com/watch?v=8eWsEqPVPHY", channel: "Music Life Channel", channelUrl: "", blurb: "立霧溪切穿大理石岩層，峭壁直落數百公尺。" },
+  { name: "太魯閣峽谷", lat: 24.173, lng: 121.57, region: "東部", county: "花蓮縣", cat: "自然風光", video: "https://www.youtube.com/watch?v=mIXugOAWmes", channel: "山水畫家的藝術 Taiwan Artist World", channelUrl: "", blurb: "立霧溪切穿大理石岩層，峭壁直落數百公尺。" },
   { name: "阿里山日出雲海", lat: 23.508, lng: 120.802, region: "南部", county: "嘉義縣", cat: "自然風光", video: "https://www.youtube.com/watch?v=LrjDGN54yKg", channel: "靖天電視台 GoldenTV", channelUrl: "https://www.youtube.com/channel/UCNdrFiN0d3GSIiTxkLrgjXQ", blurb: "祝山觀日、森林小火車與千年神木。" },
   { name: "日月潭", lat: 23.857, lng: 120.916, region: "中部", county: "南投縣", cat: "自然風光", video: "https://www.youtube.com/watch?v=SgeOXmTPIgU", channel: "空中嚮島 The Formosa Guide", channelUrl: "https://www.youtube.com/channel/UCpEBW-QOxIHyLVx9uftc5MA", blurb: "台灣最大的天然淡水湖，邵族的家鄉。" },
   { name: "清境合歡山", lat: 24.059, lng: 121.163, region: "中部", county: "南投縣", cat: "自然風光", video: "https://www.youtube.com/watch?v=ZX8tu_Lrt0Q", channel: "Kimi0120", channelUrl: "https://www.youtube.com/channel/UC2jtyP3wnktGSxsGJjCBDlw", blurb: "武嶺海拔 3,275 公尺，公路可達的最高點。" },
@@ -189,12 +193,18 @@ function credit(s) {
     : "（頻道名稱待補）";
   return ch;
 }
+// Opens Google Earth Web over the spot, tilted for a 3D view.
+function earthLink(s) {
+  if (!s.lat) return "";
+  const url = `https://earth.google.com/web/@${s.lat},${s.lng},800a,4000d,35y,0h,65t,0r`;
+  return `<a class="earth" href="${url}" target="_blank" rel="noopener">在 Google Earth 看這裡 ↗</a>`;
+}
 function card(s) {
   const ch = credit(s);
   return `<article class="card" data-cat="${s.cat}">
     <div class="video">${frame(s)}</div>
     <div class="meta"><h2>${esc(s.name)}</h2><span class="tag"><i>${s.trail ? "山林步道" : s.cat}</i>　${s.region ? s.region + "・" : ""}${esc(s.county)}</span>${s.level ? `<span class="lv" data-l="${s.level}">${s.level}</span>` : ""}</div>
-    <p class="blurb">${esc(s.blurb)}</p>
+    <p class="blurb">${esc(s.blurb)}</p>${earthLink(s)}
     <p class="credit">影片：${ch}　著作權與收益歸原作者所有</p>
   </article>`;
 }
@@ -238,7 +248,7 @@ function drawPins(list) {
     el.title = s.name;
     el.setAttribute("aria-label", s.name);
     const popup = new maplibregl.Popup({ offset: 12, maxWidth: "none" }).setHTML(
-      `<div class="pop"><h3>${esc(s.name)}</h3><div class="video">${frame(s)}</div><p>影片：${credit(s)}・著作權與收益歸原作者所有</p></div>`);
+      `<div class="pop"><h3>${esc(s.name)}</h3><div class="video">${frame(s)}</div>${earthLink(s)}<p>影片：${credit(s)}・著作權與收益歸原作者所有</p></div>`);
     popup.on("open", () => map.easeTo({ center: [s.lng, s.lat], zoom: Math.max(map.getZoom(), 10.5), pitch: 60, duration: 1400 }));
     return new maplibregl.Marker({ element: el }).setLngLat([s.lng, s.lat]).setPopup(popup).addTo(map);
   });
